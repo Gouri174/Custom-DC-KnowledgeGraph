@@ -1,0 +1,286 @@
+{
+  "nodes": [
+    {
+      "id": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "label": "GVA Other Service\n(Constant prices)",
+      "type": "STAT_VAR",
+      "level": 2,
+      "tooltip": "DCID: RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService\nType: STAT_VAR\nName: Gross value added in other service sector at constant prices\n\neconomicSector: MOSPI Other Service\nactivitySource: GrossValueAdded\nstatType: measuredValue\npopulationType: EconomicActivity\nmeasurementQualifier: RealValue\nmeasuredProperty: amount\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "MOSPI_OtherService",
+      "label": "MOSPI Other Service",
+      "type": "ENUM",
+      "level": 0,
+      "tooltip": "DCID: MOSPI_OtherService\nType: ENUM\nName: MOSPI Other Service\nProperty: economicSector\n\nThis is a dimension value that constrains the StatVar."
+    },
+    {
+      "id": "GrossValueAdded",
+      "label": "Gross Value Added",
+      "type": "ENUM",
+      "level": 0,
+      "tooltip": "DCID: GrossValueAdded\nType: ENUM\nName: GrossValueAdded\nProperty: activitySource\n\nThis is a dimension value that constrains the StatVar."
+    },
+    {
+      "id": "measuredValue",
+      "label": "measuredValue",
+      "type": "ENUM",
+      "level": 0,
+      "tooltip": "DCID: measuredValue\nType: ENUM\nName: measuredValue\nProperty: statType\n\nThis is a dimension value that constrains the StatVar."
+    },
+    {
+      "id": "EconomicActivity",
+      "label": "Economic Activity",
+      "type": "ENUM",
+      "level": 0,
+      "tooltip": "DCID: EconomicActivity\nType: ENUM\nName: EconomicActivity\nProperty: populationType\n\nThis is a dimension value that constrains the StatVar."
+    },
+    {
+      "id": "RealValue",
+      "label": "Real Value\n(constant prices)",
+      "type": "ENUM",
+      "level": 0,
+      "tooltip": "DCID: RealValue\nType: ENUM\nName: RealValue\nProperty: measurementQualifier\n\nThis is a dimension value that constrains the StatVar."
+    },
+    {
+      "id": "amount",
+      "label": "amount",
+      "type": "ENUM",
+      "level": 0,
+      "tooltip": "DCID: amount\nType: ENUM\nName: amount\nProperty: measuredProperty\n\nThis is a dimension value that constrains the StatVar."
+    },
+    {
+      "id": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "label": "GVA Public Admin & Defence\n(Constant prices)",
+      "type": "STAT_VAR",
+      "level": 2,
+      "tooltip": "DCID: RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService\nType: STAT_VAR\nName: Gross value added in public administration and defence and other service sector at constant prices\n\neconomicSector: PublicAdministrationAndDefence__MOSPI_OtherService\nactivitySource: GrossValueAdded\nstatType: measuredValue\npopulationType: EconomicActivity\nmeasurementQualifier: RealValue\nmeasuredProperty: amount\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "PublicAdministrationAndDefence__MOSPI_OtherService",
+      "label": "Public Admin & Defence + MOSPI",
+      "type": "ENUM",
+      "level": 0,
+      "tooltip": "DCID: PublicAdministrationAndDefence__MOSPI_OtherService\nType: ENUM\nName: PublicAdministrationAndDefence__MOSPI_OtherService\nProperty: economicSector\n\nThis is a dimension value that constrains the StatVar."
+    },
+    {
+      "id": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "label": "GVA Other Service\n(Current prices)",
+      "type": "STAT_VAR",
+      "level": 2,
+      "tooltip": "DCID: Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService\nType: STAT_VAR\nName: Gross value added in other service sector at current prices\n\neconomicSector: MOSPI Other Service\nactivitySource: GrossValueAdded\nstatType: measuredValue\npopulationType: EconomicActivity\nmeasurementQualifier: Nominal\nmeasuredProperty: amount\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "Nominal",
+      "label": "Nominal\n(current prices)",
+      "type": "ENUM",
+      "level": 0,
+      "tooltip": "DCID: Nominal\nType: ENUM\nName: Nominal\nProperty: measurementQualifier\n\nThis is a dimension value that constrains the StatVar."
+    },
+    {
+      "id": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "label": "GVA Public Admin & Defence\n(Current prices)",
+      "type": "STAT_VAR",
+      "level": 2,
+      "tooltip": "DCID: Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService\nType: STAT_VAR\nName: Gross value added in public administration and defence and other service sector at current prices\n\neconomicSector: PublicAdministrationAndDefence__MOSPI_OtherService\nactivitySource: GrossValueAdded\nstatType: measuredValue\npopulationType: EconomicActivity\nmeasurementQualifier: Nominal\nmeasuredProperty: amount\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "obs::RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "label": "Observations\n(India, annual)",
+      "type": "OBSERVATION",
+      "level": 4,
+      "tooltip": "StatVar: RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService\nPlace: India\nFetch via: /api/stat/series"
+    },
+    {
+      "id": "obs::RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "label": "Observations\n(India, annual)",
+      "type": "OBSERVATION",
+      "level": 4,
+      "tooltip": "StatVar: RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService\nPlace: India\nFetch via: /api/stat/series"
+    },
+    {
+      "id": "obs::Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "label": "Observations\n(India, annual)",
+      "type": "OBSERVATION",
+      "level": 4,
+      "tooltip": "StatVar: Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService\nPlace: India\nFetch via: /api/stat/series"
+    },
+    {
+      "id": "obs::Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "label": "Observations\n(India, annual)",
+      "type": "OBSERVATION",
+      "level": 4,
+      "tooltip": "StatVar: Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService\nPlace: India\nFetch via: /api/stat/series"
+    }
+  ],
+  "edges": [
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "MOSPI_OtherService",
+      "prop": "economicSector",
+      "dashes": false
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "GrossValueAdded",
+      "prop": "activitySource",
+      "dashes": false
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "measuredValue",
+      "prop": "statType",
+      "dashes": false
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "EconomicActivity",
+      "prop": "populationType",
+      "dashes": false
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "RealValue",
+      "prop": "measurementQualifier",
+      "dashes": false
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "amount",
+      "prop": "measuredProperty",
+      "dashes": false
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "PublicAdministrationAndDefence__MOSPI_OtherService",
+      "prop": "economicSector",
+      "dashes": false
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "GrossValueAdded",
+      "prop": "activitySource",
+      "dashes": false
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "measuredValue",
+      "prop": "statType",
+      "dashes": false
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "EconomicActivity",
+      "prop": "populationType",
+      "dashes": false
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "RealValue",
+      "prop": "measurementQualifier",
+      "dashes": false
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "amount",
+      "prop": "measuredProperty",
+      "dashes": false
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "MOSPI_OtherService",
+      "prop": "economicSector",
+      "dashes": false
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "GrossValueAdded",
+      "prop": "activitySource",
+      "dashes": false
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "measuredValue",
+      "prop": "statType",
+      "dashes": false
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "EconomicActivity",
+      "prop": "populationType",
+      "dashes": false
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "Nominal",
+      "prop": "measurementQualifier",
+      "dashes": false
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "amount",
+      "prop": "measuredProperty",
+      "dashes": false
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "PublicAdministrationAndDefence__MOSPI_OtherService",
+      "prop": "economicSector",
+      "dashes": false
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "GrossValueAdded",
+      "prop": "activitySource",
+      "dashes": false
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "measuredValue",
+      "prop": "statType",
+      "dashes": false
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "EconomicActivity",
+      "prop": "populationType",
+      "dashes": false
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "Nominal",
+      "prop": "measurementQualifier",
+      "dashes": false
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "amount",
+      "prop": "measuredProperty",
+      "dashes": false
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "obs::RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "prop": "hasObservation",
+      "dashes": false
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "obs::RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "prop": "hasObservation",
+      "dashes": false
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "obs::Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "prop": "hasObservation",
+      "dashes": false
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "obs::Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "prop": "hasObservation",
+      "dashes": false
+    }
+  ]
+}

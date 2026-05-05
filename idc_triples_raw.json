@@ -1,0 +1,548 @@
+{
+  "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService": {
+    "out": {
+      "activitySource": [
+        {
+          "dcid": "GrossValueAdded",
+          "name": "GrossValueAdded",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "EconomicActivitySourceEnum"
+          ]
+        }
+      ],
+      "constraintProperties": [
+        {
+          "dcid": "activitySource",
+          "name": "activitySource",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        },
+        {
+          "dcid": "economicSector",
+          "name": "economicSector",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        }
+      ],
+      "economicSector": [
+        {
+          "dcid": "MOSPI_OtherService",
+          "name": "MOSPI Other Service",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "EconomicSectorEnum"
+          ]
+        }
+      ],
+      "measuredProperty": [
+        {
+          "dcid": "amount",
+          "name": "amount",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        }
+      ],
+      "measurementQualifier": [
+        {
+          "dcid": "RealValue",
+          "name": "RealValue",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "EconomicMetricEnum"
+          ]
+        }
+      ],
+      "memberOf": [
+        {
+          "dcid": "dc/g/GVA_Services",
+          "name": "Services",
+          "types": [
+            "StatVarGroup"
+          ]
+        },
+        {
+          "dcid": "dc/g/EconomicActivity_ActivitySource-GrossValueAdded_EconomicSector-MOSPIOtherService",
+          "name": "Economic Activity With Activity Source = Gross Value Added, Economic Sector = MOSPI_Other Service",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "StatVarGroup"
+          ]
+        }
+      ],
+      "name": [
+        {
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "value": "Gross value added in other service sector at constant prices"
+        }
+      ],
+      "populationType": [
+        {
+          "dcid": "EconomicActivity",
+          "name": "EconomicActivity",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Class"
+          ]
+        }
+      ],
+      "provenance": [
+        {
+          "dcid": "dc/base/HumanReadableStatVars",
+          "name": "HumanReadableStatVars",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Provenance"
+          ]
+        }
+      ],
+      "statType": [
+        {
+          "dcid": "measuredValue",
+          "name": "measuredValue",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        }
+      ],
+      "typeOf": [
+        {
+          "dcid": "StatisticalVariable",
+          "name": "StatisticalVariable",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Class"
+          ]
+        }
+      ]
+    },
+    "in": {
+      "member": [
+        {
+          "dcid": "dc/svpg/RealGDPByIndustry",
+          "name": "Breakdown of real GDP by industry",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "StatVarPeerGroup"
+          ]
+        }
+      ]
+    }
+  },
+  "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService": {
+    "out": {
+      "activitySource": [
+        {
+          "dcid": "GrossValueAdded",
+          "name": "GrossValueAdded",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "EconomicActivitySourceEnum"
+          ]
+        }
+      ],
+      "constraintProperties": [
+        {
+          "dcid": "activitySource",
+          "name": "activitySource",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        },
+        {
+          "dcid": "economicSector",
+          "name": "economicSector",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        }
+      ],
+      "economicSector": [
+        {
+          "dcid": "PublicAdministrationAndDefence__MOSPI_OtherService",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Thing"
+          ]
+        }
+      ],
+      "measuredProperty": [
+        {
+          "dcid": "amount",
+          "name": "amount",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        }
+      ],
+      "measurementQualifier": [
+        {
+          "dcid": "RealValue",
+          "name": "RealValue",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "EconomicMetricEnum"
+          ]
+        }
+      ],
+      "memberOf": [
+        {
+          "dcid": "dc/g/GVA_Services",
+          "name": "Services",
+          "types": [
+            "StatVarGroup"
+          ]
+        },
+        {
+          "dcid": "dc/g/EconomicActivity_ActivitySource-GrossValueAdded_EconomicSector-PublicAdministrationAndDefenceMOSPIOtherService",
+          "name": "Economic Activity With Activity Source = Gross Value Added, Economic Sector = Public Administration And Defence & MOSPI_Other Service",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "StatVarGroup"
+          ]
+        }
+      ],
+      "name": [
+        {
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "value": "Gross value added in public administration and defence and other service sector at constant prices"
+        }
+      ],
+      "populationType": [
+        {
+          "dcid": "EconomicActivity",
+          "name": "EconomicActivity",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Class"
+          ]
+        }
+      ],
+      "provenance": [
+        {
+          "dcid": "dc/base/HumanReadableStatVars",
+          "name": "HumanReadableStatVars",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Provenance"
+          ]
+        }
+      ],
+      "statType": [
+        {
+          "dcid": "measuredValue",
+          "name": "measuredValue",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        }
+      ],
+      "typeOf": [
+        {
+          "dcid": "StatisticalVariable",
+          "name": "StatisticalVariable",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Class"
+          ]
+        }
+      ]
+    },
+    "in": {
+      "member": [
+        {
+          "dcid": "dc/svpg/RealGDPByIndustry",
+          "name": "Breakdown of real GDP by industry",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "StatVarPeerGroup"
+          ]
+        }
+      ]
+    }
+  },
+  "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService": {
+    "out": {
+      "activitySource": [
+        {
+          "dcid": "GrossValueAdded",
+          "name": "GrossValueAdded",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "EconomicActivitySourceEnum"
+          ]
+        }
+      ],
+      "constraintProperties": [
+        {
+          "dcid": "activitySource",
+          "name": "activitySource",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        },
+        {
+          "dcid": "economicSector",
+          "name": "economicSector",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        }
+      ],
+      "economicSector": [
+        {
+          "dcid": "MOSPI_OtherService",
+          "name": "MOSPI Other Service",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "EconomicSectorEnum"
+          ]
+        }
+      ],
+      "measuredProperty": [
+        {
+          "dcid": "amount",
+          "name": "amount",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        }
+      ],
+      "measurementQualifier": [
+        {
+          "dcid": "Nominal",
+          "name": "Nominal",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "EconomicMetricEnum"
+          ]
+        }
+      ],
+      "memberOf": [
+        {
+          "dcid": "dc/g/GVA_Services",
+          "name": "Services",
+          "types": [
+            "StatVarGroup"
+          ]
+        },
+        {
+          "dcid": "dc/g/EconomicActivity_ActivitySource-GrossValueAdded_EconomicSector-MOSPIOtherService",
+          "name": "Economic Activity With Activity Source = Gross Value Added, Economic Sector = MOSPI_Other Service",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "StatVarGroup"
+          ]
+        }
+      ],
+      "name": [
+        {
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "value": "Gross value added in other service sector at current prices"
+        }
+      ],
+      "populationType": [
+        {
+          "dcid": "EconomicActivity",
+          "name": "EconomicActivity",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Class"
+          ]
+        }
+      ],
+      "provenance": [
+        {
+          "dcid": "dc/base/HumanReadableStatVars",
+          "name": "HumanReadableStatVars",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Provenance"
+          ]
+        }
+      ],
+      "statType": [
+        {
+          "dcid": "measuredValue",
+          "name": "measuredValue",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        }
+      ],
+      "typeOf": [
+        {
+          "dcid": "StatisticalVariable",
+          "name": "StatisticalVariable",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Class"
+          ]
+        }
+      ]
+    },
+    "in": {
+      "member": [
+        {
+          "dcid": "dc/svpg/NominalGDPByIndustry",
+          "name": "Breakdown of nominal GDP by industry",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "StatVarPeerGroup"
+          ]
+        }
+      ]
+    }
+  },
+  "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService": {
+    "out": {
+      "activitySource": [
+        {
+          "dcid": "GrossValueAdded",
+          "name": "GrossValueAdded",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "EconomicActivitySourceEnum"
+          ]
+        }
+      ],
+      "constraintProperties": [
+        {
+          "dcid": "activitySource",
+          "name": "activitySource",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        },
+        {
+          "dcid": "economicSector",
+          "name": "economicSector",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        }
+      ],
+      "economicSector": [
+        {
+          "dcid": "PublicAdministrationAndDefence__MOSPI_OtherService",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Thing"
+          ]
+        }
+      ],
+      "measuredProperty": [
+        {
+          "dcid": "amount",
+          "name": "amount",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        }
+      ],
+      "measurementQualifier": [
+        {
+          "dcid": "Nominal",
+          "name": "Nominal",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "EconomicMetricEnum"
+          ]
+        }
+      ],
+      "memberOf": [
+        {
+          "dcid": "dc/g/GVA_Services",
+          "name": "Services",
+          "types": [
+            "StatVarGroup"
+          ]
+        },
+        {
+          "dcid": "dc/g/EconomicActivity_ActivitySource-GrossValueAdded_EconomicSector-PublicAdministrationAndDefenceMOSPIOtherService",
+          "name": "Economic Activity With Activity Source = Gross Value Added, Economic Sector = Public Administration And Defence & MOSPI_Other Service",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "StatVarGroup"
+          ]
+        }
+      ],
+      "name": [
+        {
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "value": "Gross value added in public administration and defence and other service sector at current prices"
+        }
+      ],
+      "populationType": [
+        {
+          "dcid": "EconomicActivity",
+          "name": "EconomicActivity",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Class"
+          ]
+        }
+      ],
+      "provenance": [
+        {
+          "dcid": "dc/base/HumanReadableStatVars",
+          "name": "HumanReadableStatVars",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Provenance"
+          ]
+        }
+      ],
+      "statType": [
+        {
+          "dcid": "measuredValue",
+          "name": "measuredValue",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Property"
+          ]
+        }
+      ],
+      "typeOf": [
+        {
+          "dcid": "StatisticalVariable",
+          "name": "StatisticalVariable",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "Class"
+          ]
+        }
+      ]
+    },
+    "in": {
+      "member": [
+        {
+          "dcid": "dc/svpg/NominalGDPByIndustry",
+          "name": "Breakdown of nominal GDP by industry",
+          "provenanceId": "dc/base/HumanReadableStatVars",
+          "types": [
+            "StatVarPeerGroup"
+          ]
+        }
+      ]
+    }
+  }
+}

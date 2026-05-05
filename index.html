@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>India Data Commons — Knowledge Graph Explorer</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #f4f5f7; color: #1a1a1a; min-height: 100vh; }
+  header { background: #fff; border-bottom: 1px solid #e0e0e0; padding: 14px 24px; display: flex; align-items: center; gap: 12px; }
+  header h1 { font-size: 16px; font-weight: 600; }
+  header span { font-size: 12px; color: #888; background: #f0f0f0; padding: 3px 8px; border-radius: 4px; }
+  .main { padding: 20px 24px; max-width: 1300px; margin: 0 auto; }
+  .controls { display: flex; gap: 10px; margin-bottom: 14px; align-items: center; flex-wrap: wrap; }
+  .controls input[type=text] { flex: 1; min-width: 300px; padding: 10px 14px; font-size: 14px; border: 1px solid #d0d0d0; border-radius: 8px; background: #fff; outline: none; }
+  .controls input[type=text]:focus { border-color: #185FA5; }
+  .controls label { font-size: 13px; color: #555; white-space: nowrap; }
+  .controls input[type=range] { width: 100px; }
+  .controls span.depth-val { font-size: 13px; font-weight: 600; color: #185FA5; min-width: 16px; }
+  .controls button { padding: 10px 22px; font-size: 14px; font-weight: 500; background: #185FA5; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+  .controls button:hover { background: #0C447C; }
+  .controls button.secondary { background: #fff; color: #185FA5; border: 1px solid #185FA5; }
+  .controls button.secondary:hover { background: #E6F1FB; }
+  .status { font-size: 12px; color: #666; margin-bottom: 10px; min-height: 18px; }
+  .graph-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden; margin-bottom: 16px; position: relative; }
+  #graph-container {
+    width: 100%; height: 700px; overflow: hidden;
+    cursor: grab; position: relative; background: #fff;
+  }
+  #graph-container:active { cursor: grabbing; }
+  #graph-svg { display: block; position: absolute; top: 0; left: 0; }
+  .zoom-hint { position: absolute; bottom: 10px; right: 12px; font-size: 11px; color: #bbb; pointer-events: none; }
+  .legend { display: flex; gap: 20px; flex-wrap: wrap; padding: 10px 16px; border-top: 1px solid #f0f0f0; font-size: 12px; color: #555; align-items: center; }
+  .leg { display: flex; align-items: center; gap: 6px; }
+  .leg-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+  .detail-panel { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 16px 18px; font-size: 13px; display: none; }
+  .detail-panel.show { display: block; }
+  .detail-panel h3 { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #185FA5; }
+  .prop-row { display: flex; gap: 12px; padding: 5px 0; border-bottom: 1px solid #f5f5f5; }
+  .prop-key { color: #888; min-width: 160px; flex-shrink: 0; font-size: 12px; }
+  .prop-val { color: #1a1a1a; word-break: break-all; font-size: 12px; }
+  .tooltip {
+    position: absolute; background: #1a1a1a; color: #fff;
+    padding: 8px 11px; border-radius: 7px; font-size: 11px;
+    pointer-events: none; display: none; z-index: 20;
+    max-width: 320px; line-height: 1.6; white-space: pre-wrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>India Data Commons — Knowledge Graph Explorer</h1>
+  <span>indiadatacommons.org</span>
+</header>
+<div class="main">
+  <div class="controls">
+    <input type="text" id="dcid-input"
+      placeholder="Enter DCID e.g. RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService"
+      value="RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService"/>
+    <label>Depth</label>
+    <input type="range" id="depth-slider" min="1" max="3" value="2" step="1"
+      oninput="document.getElementById('depth-val').textContent=this.value"/>
+    <span class="depth-val" id="depth-val">2</span>
+    <button onclick="loadGraph()">Visualize</button>
+    <button class="secondary" onclick="resetView()">Reset view</button>
+  </div>
+  <div class="status" id="status">Enter a DCID and click Visualize</div>
+  <div class="graph-card">
+    <div id="graph-container">
+      <svg id="graph-svg">
+        <g id="zoom-group"></g>
+      </svg>
+      <div class="zoom-hint">Scroll to zoom · Drag to pan</div>
+      <div class="tooltip" id="tooltip"></div>
+    </div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:#185FA5"></div> Root DCID</div>
+      <div class="leg"><div class="leg-dot" style="background:#1D9E75"></div> Depth 1</div>
+      <div class="leg"><div class="leg-dot" style="background:#BA7517"></div> Depth 2</div>
+      <div class="leg"><div class="leg-dot" style="background:#7F77DD"></div> Depth 3</div>
+      <div style="margin-left:auto;color:#bbb;font-size:11px">Hover = full name · Click = details · Scroll = zoom · Drag = pan</div>
+    </div>
+  </div>
+  <div class="detail-panel" id="detail-panel"></div>
+</div>
+
+<script>
+const PROXY = 'http://localhost:5050';
+const ns = 'http://www.w3.org/2000/svg';
+
+const RING_FILLS   = ['#185FA5', '#E1F5EE', '#FAEEDA', '#EEEDFE'];
+const RING_STROKES = ['#0C447C', '#0F6E56', '#854F0B', '#534AB7'];
+const RING_GAP     = 200;
+
+// Pan & zoom state
+let viewX = 0, viewY = 0, scale = 1;
+let isPanning = false, panStartX = 0, panStartY = 0, panOriginX = 0, panOriginY = 0;
+
+const container = document.getElementById('graph-container');
+const svg       = document.getElementById('graph-svg');
+const zoomGroup = document.getElementById('zoom-group');
+
+// Resize SVG to fill container
+function resizeSvg() {
+  svg.setAttribute('width',  container.clientWidth);
+  svg.setAttribute('height', container.clientHeight);
+}
+resizeSvg();
+window.addEventListener('resize', resizeSvg);
+
+function applyTransform() {
+  zoomGroup.setAttribute('transform', `translate(${viewX},${viewY}) scale(${scale})`);
+}
+
+// Zoom on scroll
+container.addEventListener('wheel', e => {
+  e.preventDefault();
+  const rect = container.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  const delta = e.deltaY < 0 ? 1.12 : 0.89;
+  const newScale = Math.min(8, Math.max(0.15, scale * delta));
+  // Zoom toward mouse pointer
+  viewX = mx - (mx - viewX) * (newScale / scale);
+  viewY = my - (my - viewY) * (newScale / scale);
+  scale = newScale;
+  applyTransform();
+}, { passive: false });
+
+// Pan on drag
+container.addEventListener('mousedown', e => {
+  if (e.button !== 0) return;
+  isPanning = true;
+  panStartX = e.clientX; panStartY = e.clientY;
+  panOriginX = viewX; panOriginY = viewY;
+  container.style.cursor = 'grabbing';
+});
+window.addEventListener('mousemove', e => {
+  if (!isPanning) return;
+  viewX = panOriginX + (e.clientX - panStartX);
+  viewY = panOriginY + (e.clientY - panStartY);
+  applyTransform();
+});
+window.addEventListener('mouseup', () => {
+  isPanning = false;
+  container.style.cursor = 'grab';
+});
+
+// Touch pan/zoom
+let lastTouchDist = null;
+container.addEventListener('touchstart', e => {
+  if (e.touches.length === 1) {
+    isPanning = true;
+    panStartX = e.touches[0].clientX; panStartY = e.touches[0].clientY;
+    panOriginX = viewX; panOriginY = viewY;
+  } else if (e.touches.length === 2) {
+    isPanning = false;
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    lastTouchDist = Math.sqrt(dx*dx+dy*dy);
+  }
+}, { passive: true });
+container.addEventListener('touchmove', e => {
+  if (e.touches.length === 1 && isPanning) {
+    viewX = panOriginX + (e.touches[0].clientX - panStartX);
+    viewY = panOriginY + (e.touches[0].clientY - panStartY);
+    applyTransform();
+  } else if (e.touches.length === 2 && lastTouchDist) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    const dist = Math.sqrt(dx*dx+dy*dy);
+    const delta = dist / lastTouchDist;
+    scale = Math.min(8, Math.max(0.15, scale * delta));
+    lastTouchDist = dist;
+    applyTransform();
+  }
+}, { passive: true });
+container.addEventListener('touchend', () => { isPanning = false; lastTouchDist = null; });
+
+function resetView() {
+  scale = 1; viewX = 0; viewY = 0;
+  applyTransform();
+}
+
+async function loadGraph() {
+  const dcid = document.getElementById('dcid-input').value.trim();
+  const depth = parseInt(document.getElementById('depth-slider').value);
+  if (!dcid) return;
+  setStatus('Fetching graph (depth ' + depth + ') from India Data Commons...');
+  clearGraph();
+
+  try {
+    const graphData = await fetch(
+      `${PROXY}/graph/${encodeURIComponent(dcid)}?depth=${depth}`
+    ).then(r => r.json());
+
+    if (graphData.error) throw new Error(graphData.error);
+
+    const nodeMap = {};
+    const edges = [];
+
+    function walk(g, d, parentId) {
+      if (!g || !g.dcid) return;
+      if (!nodeMap[g.dcid] || nodeMap[g.dcid].depth > d) {
+        nodeMap[g.dcid] = { id: g.dcid, depth: d, out: g.out || {}, parent: parentId };
+      }
+      const out = g.out || {};
+      Object.keys(out).forEach(prop => {
+        if (prop === 'dcid') return;
+        (out[prop] || []).forEach(v => {
+          const target = v.dcid || v.name;
+          if (!target) return;
+          edges.push({ source: g.dcid, target, label: prop });
+          if (!nodeMap[target]) nodeMap[target] = { id: target, depth: d+1, out: {}, parent: g.dcid };
+        });
+      });
+      (g.children || []).forEach(child => {
+        if (child.dcid) {
+          edges.push({ source: g.dcid, target: child.dcid, label: 'expands_to' });
+          walk(child, d+1, g.dcid);
+        }
+      });
+    }
+    walk(graphData, 0, null);
+
+    const nodes = Object.values(nodeMap);
+    const uniqueEdges = dedupEdges(edges);
+
+    const byDepth = {};
+    nodes.forEach(n => { if (!byDepth[n.depth]) byDepth[n.depth]=[]; byDepth[n.depth].push(n); });
+    const maxDepth = Math.max(...Object.keys(byDepth).map(Number));
+
+    setStatus(`Loaded — ${nodes.length} nodes, ${uniqueEdges.length} edges · depth=${depth} · Source: indiadatacommons.org`);
+
+    assignAngles(nodeMap, byDepth, maxDepth);
+
+    const outerR = (maxDepth + 1) * RING_GAP;
+    const cx = outerR + 140, cy = outerR + 140;
+
+    nodes.forEach(n => {
+      if (n.depth === 0) { n.x = cx; n.y = cy; }
+      else { const r = n.depth * RING_GAP; n.x = cx + r*Math.cos(n.angle); n.y = cy + r*Math.sin(n.angle); }
+    });
+
+    // Center view on the graph
+    const cw = container.clientWidth, ch = container.clientHeight;
+    viewX = cw/2 - cx; viewY = ch/2 - cy; scale = 1;
+    applyTransform();
+
+    renderGraph(nodes, uniqueEdges, nodeMap, graphData.dcid, cx, cy, maxDepth);
+
+  } catch(e) {
+    setStatus('Error: ' + e.message + ' — Is the proxy running? Run: python app.py');
+  }
+}
+
+function assignAngles(nodeMap, byDepth, maxDepth) {
+  const root = Object.values(nodeMap).find(n => n.depth === 0);
+  if (root) root.angle = 0;
+
+  for (let d = 1; d <= maxDepth; d++) {
+    const nodesAtDepth = byDepth[d] || [];
+    if (!nodesAtDepth.length) continue;
+    const byParent = {};
+    nodesAtDepth.forEach(n => {
+      const p = n.parent || '__root__';
+      if (!byParent[p]) byParent[p] = [];
+      byParent[p].push(n);
+    });
+    const parents = Object.keys(byParent);
+    parents.forEach((parentId, pi) => {
+      const children = byParent[parentId];
+      const parentNode = nodeMap[parentId];
+      const parentAngle = parentNode ? (parentNode.angle || 0) : (pi / parents.length) * 2 * Math.PI;
+      const sectorWidth = (2 * Math.PI) / Math.max(parents.length, 1);
+      const startAngle = parentAngle - sectorWidth / 2;
+      children.forEach((child, ci) => {
+        child.angle = children.length === 1 ? parentAngle :
+          startAngle + (ci / (children.length - 1)) * sectorWidth;
+      });
+    });
+  }
+}
+
+function dedupEdges(edges) {
+  const seen = new Set();
+  return edges.filter(e => {
+    const key = `${e.source}|||${e.target}|||${e.label}`;
+    if (seen.has(key)) return false;
+    seen.add(key); return true;
+  });
+}
+
+function renderGraph(nodes, edges, nodeMap, rootId, cx, cy, maxDepth) {
+  zoomGroup.innerHTML = '';
+
+  // Defs
+  const defs = document.createElementNS(ns,'defs');
+
+  // Arrow marker — larger, more visible
+  const m = document.createElementNS(ns,'marker');
+  m.setAttribute('id','arr'); m.setAttribute('viewBox','0 0 10 10');
+  m.setAttribute('refX',8); m.setAttribute('refY',5);
+  m.setAttribute('markerWidth',6); m.setAttribute('markerHeight',6);
+  m.setAttribute('orient','auto-start-reverse');
+  const mp = document.createElementNS(ns,'path');
+  mp.setAttribute('d','M1 1L9 5L1 9'); mp.setAttribute('fill','none');
+  mp.setAttribute('stroke','#999'); mp.setAttribute('stroke-width',1.5);
+  mp.setAttribute('stroke-linecap','round'); mp.setAttribute('stroke-linejoin','round');
+  m.appendChild(mp); defs.appendChild(m);
+
+  zoomGroup.appendChild(defs);
+
+  // Ring guides
+  for (let d = 1; d <= maxDepth; d++) {
+    const r = d * RING_GAP;
+    const gc = document.createElementNS(ns,'circle');
+    gc.setAttribute('cx',cx); gc.setAttribute('cy',cy); gc.setAttribute('r',r);
+    gc.setAttribute('fill','none'); gc.setAttribute('stroke','#f0eeea');
+    gc.setAttribute('stroke-width',1.5); gc.setAttribute('stroke-dasharray','6,5');
+    zoomGroup.appendChild(gc);
+
+    const gt = document.createElementNS(ns,'text');
+    gt.setAttribute('x', cx+r-10); gt.setAttribute('y', cy-8);
+    gt.setAttribute('font-size',10); gt.setAttribute('fill','#ccc');
+    gt.setAttribute('font-family','Segoe UI,sans-serif'); gt.setAttribute('text-anchor','end');
+    gt.textContent = `depth ${d}`;
+    zoomGroup.appendChild(gt);
+  }
+
+  // Edge layer group (drawn before nodes)
+  const edgeGroup = document.createElementNS(ns,'g');
+  edgeGroup.setAttribute('id','edge-layer');
+  zoomGroup.appendChild(edgeGroup);
+
+  // Node layer group
+  const nodeGroup = document.createElementNS(ns,'g');
+  nodeGroup.setAttribute('id','node-layer');
+  zoomGroup.appendChild(nodeGroup);
+
+  // Draw edges
+  edges.forEach(e => {
+    const s = nodeMap[e.source], t = nodeMap[e.target];
+    if (!s || !t) return;
+    const sx = s.x, sy = s.y, tx = t.x, ty = t.y;
+
+    // Control point for curve — offset perpendicular
+    const midX = (sx+tx)/2 + (ty-sy)*0.1;
+    const midY = (sy+ty)/2 + (sx-tx)*0.1;
+
+    const path = document.createElementNS(ns,'path');
+    path.setAttribute('d', `M${sx},${sy} Q${midX},${midY} ${tx},${ty}`);
+    path.setAttribute('fill','none');
+    path.setAttribute('stroke', e.label === 'expands_to' ? '#e0e0e0' : '#bbb');
+    path.setAttribute('stroke-width', 1.5);
+    path.setAttribute('marker-end','url(#arr)');
+    edgeGroup.appendChild(path);
+
+    // Edge label — positioned at the curve midpoint, with white bg for readability
+    if (e.label && e.label !== 'expands_to') {
+      const lbl = e.label.length > 20 ? e.label.slice(0,20)+'…' : e.label;
+      const lx = midX, ly = midY - 5;
+
+      // White pill background so label is readable over edges
+      const lblW = lbl.length * 5.5 + 10;
+      const bg = document.createElementNS(ns,'rect');
+      bg.setAttribute('x', lx - lblW/2); bg.setAttribute('y', ly - 10);
+      bg.setAttribute('width', lblW); bg.setAttribute('height', 13);
+      bg.setAttribute('rx', 3); bg.setAttribute('fill', '#fff');
+      bg.setAttribute('fill-opacity', '0.85');
+      edgeGroup.appendChild(bg);
+
+      const lt = document.createElementNS(ns,'text');
+      lt.setAttribute('x', lx); lt.setAttribute('y', ly);
+      lt.setAttribute('text-anchor','middle');
+      lt.setAttribute('font-size',9); lt.setAttribute('fill','#888');
+      lt.setAttribute('font-family','Segoe UI,sans-serif');
+      lt.textContent = lbl;
+      edgeGroup.appendChild(lt);
+    }
+  });
+
+  // Draw nodes
+  nodes.forEach(n => {
+    const d = Math.min(n.depth, RING_FILLS.length - 1);
+    const isRoot = n.id === rootId;
+    const r = isRoot ? 20 : 11;
+
+    const g = document.createElementNS(ns,'g');
+    g.style.cursor = 'pointer';
+
+    // Shadow ring for depth > 0
+    if (!isRoot) {
+      const shadow = document.createElementNS(ns,'circle');
+      shadow.setAttribute('cx',n.x); shadow.setAttribute('cy',n.y);
+      shadow.setAttribute('r', r+2);
+      shadow.setAttribute('fill', RING_STROKES[d]);
+      shadow.setAttribute('opacity','0.12');
+      g.appendChild(shadow);
+    }
+
+    const circle = document.createElementNS(ns,'circle');
+    circle.setAttribute('cx',n.x); circle.setAttribute('cy',n.y);
+    circle.setAttribute('r',r);
+    circle.setAttribute('fill', RING_FILLS[d]);
+    circle.setAttribute('stroke', RING_STROKES[d]);
+    circle.setAttribute('stroke-width', isRoot ? 3 : 2);
+    g.appendChild(circle);
+
+    // Label
+    const shortId = n.id.length > 18 ? n.id.slice(0,18)+'…' : n.id;
+    const lt = document.createElementNS(ns,'text');
+    lt.setAttribute('x',n.x); lt.setAttribute('y', n.y + r + 13);
+    lt.setAttribute('text-anchor','middle');
+    lt.setAttribute('font-size', isRoot ? 12 : 10);
+    lt.setAttribute('font-weight', isRoot ? '700' : '400');
+    lt.setAttribute('fill', isRoot ? '#0C447C' : '#444');
+    lt.setAttribute('font-family','Segoe UI,sans-serif');
+    lt.textContent = shortId;
+    g.appendChild(lt);
+
+    // Hover tooltip
+    g.addEventListener('mouseenter', evt => {
+      const tt = document.getElementById('tooltip');
+      const out = n.out || {};
+      const propLines = Object.keys(out).filter(k=>k!=='dcid').slice(0,6)
+        .map(k => `  ${k}: ${(out[k]||[]).map(v=>v.name||v.dcid||'').filter(Boolean).slice(0,2).join(', ')}`)
+        .join('\n');
+      tt.textContent = n.id + (propLines ? '\n\n' + propLines : '');
+      tt.style.display = 'block';
+      const rect = container.getBoundingClientRect();
+      // Position tooltip near cursor but inside container
+      let tx = evt.clientX - rect.left + 14;
+      let ty = evt.clientY - rect.top + 14;
+      if (tx + 320 > container.clientWidth)  tx -= 340;
+      if (ty + 120 > container.clientHeight) ty -= 130;
+      tt.style.left = tx + 'px'; tt.style.top = ty + 'px';
+      circle.setAttribute('r', r+3);
+      circle.setAttribute('stroke-width', isRoot ? 4 : 3);
+    });
+    g.addEventListener('mouseleave', () => {
+      document.getElementById('tooltip').style.display = 'none';
+      circle.setAttribute('r', r);
+      circle.setAttribute('stroke-width', isRoot ? 3 : 2);
+    });
+    g.addEventListener('mousemove', evt => {
+      const rect = container.getBoundingClientRect();
+      const tt = document.getElementById('tooltip');
+      let tx = evt.clientX - rect.left + 14;
+      let ty = evt.clientY - rect.top + 14;
+      if (tx + 320 > container.clientWidth)  tx -= 340;
+      if (ty + 120 > container.clientHeight) ty -= 130;
+      tt.style.left = tx + 'px'; tt.style.top = ty + 'px';
+    });
+
+    // Click for detail panel
+    g.addEventListener('click', evt => {
+      evt.stopPropagation();
+      const out = n.out || {};
+      const rows = [
+        {k:'DCID', v: n.id},
+        {k:'Depth level', v: n.depth},
+        {k:'Parent node', v: n.parent || '(root)'}
+      ];
+      Object.keys(out).filter(k=>k!=='dcid').forEach(prop => {
+        const vals = (out[prop]||[]).map(v=>v.name||v.dcid||'').filter(Boolean);
+        if (vals.length) rows.push({k:prop, v:vals.join(', ')});
+      });
+      showDetail(n.id, rows);
+    });
+
+    nodeGroup.appendChild(g);
+  });
+}
+
+function showDetail(title, rows) {
+  const p = document.getElementById('detail-panel');
+  let h = `<h3>${esc(title)}</h3>`;
+  rows.forEach(r => { h += `<div class="prop-row"><span class="prop-key">${esc(r.k)}</span><span class="prop-val">${esc(r.v)}</span></div>`; });
+  p.innerHTML = h; p.classList.add('show');
+  p.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function clearGraph() {
+  zoomGroup.innerHTML = '';
+  document.getElementById('detail-panel').classList.remove('show');
+  document.getElementById('tooltip').style.display = 'none';
+}
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function setStatus(t) { document.getElementById('status').textContent = t; }
+
+document.getElementById('dcid-input').addEventListener('keydown', e => { if(e.key==='Enter') loadGraph(); });
+</script>
+</body>
+</html>
