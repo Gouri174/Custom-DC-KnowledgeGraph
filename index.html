@@ -80,7 +80,6 @@ let STATIC_GRAPH = null;
 
 const RING_FILLS   = ['#185FA5', '#E1F5EE', '#FAEEDA', '#EEEDFE'];
 const RING_STROKES = ['#0C447C', '#0F6E56', '#854F0B', '#534AB7'];
-const RING_GAP     = 200;
 
 let viewX = 0, viewY = 0, scale = 1;
 let isPanning = false, panStartX = 0, panStartY = 0, panOriginX = 0, panOriginY = 0;
@@ -175,62 +174,74 @@ async function loadGraph() {
     }
     const graphNodes = STATIC_GRAPH.nodes || [];
     const graphEdges = STATIC_GRAPH.edges || [];
-    const nodeMap = {};
-    graphNodes.forEach(n => {
-      nodeMap[n.id] = { id: n.id, depth: n.level || 0, out: {}, parent: null };
-    });
+
+    const allNodes = {};
+    graphNodes.forEach(n => { allNodes[n.id] = { id: n.id, out: {} }; });
     graphEdges.forEach(e => {
-      const src = nodeMap[e.from];
-      if (src) {
-        if (!src.out[e.prop]) src.out[e.prop] = [];
-        src.out[e.prop].push({ dcid: e.to, name: nodeMap[e.to] ? nodeMap[e.to].id : e.to });
+      if (allNodes[e.from]) {
+        if (!allNodes[e.from].out[e.prop]) allNodes[e.from].out[e.prop] = [];
+        allNodes[e.from].out[e.prop].push({ dcid: e.to, name: allNodes[e.to]?.id || e.to });
       }
-      if (nodeMap[e.to] && nodeMap[e.to].parent === null) nodeMap[e.to].parent = e.from;
     });
+
+    const nodeMap = {};
+    const queue = [[dcid, 0, null]];
+    const visited = new Set();
+    if (!allNodes[dcid]) {
+      graphNodes.forEach(n => { nodeMap[n.id] = { ...allNodes[n.id], depth: n.level || 0, parent: null }; });
+      setStatus('DCID not found — showing all nodes.');
+    } else {
+      while (queue.length) {
+        const [id, depth, parent] = queue.shift();
+        if (visited.has(id)) continue;
+        visited.add(id);
+        nodeMap[id] = { ...(allNodes[id] || { id, out: {} }), depth, parent };
+        graphEdges.forEach(e => {
+          if (e.from === id && !visited.has(e.to)) queue.push([e.to, depth + 1, id]);
+        });
+      }
+    }
+
+    const relevantEdges = graphEdges
+      .filter(e => nodeMap[e.from] && nodeMap[e.to])
+      .map(e => ({ source: e.from, target: e.to, label: e.prop }));
+    const uniqueEdges = dedupEdges(relevantEdges);
     const nodes = Object.values(nodeMap);
-    const uniqueEdges = dedupEdges(graphEdges.map(e => ({ source: e.from, target: e.to, label: e.prop })));
     const byDepth = {};
     nodes.forEach(n => { if (!byDepth[n.depth]) byDepth[n.depth]=[]; byDepth[n.depth].push(n); });
     const maxDepth = Math.max(...Object.keys(byDepth).map(Number));
     setStatus(`Loaded — ${nodes.length} nodes, ${uniqueEdges.length} edges · Source: indiadatacommons.org`);
-    assignAngles(nodeMap, byDepth, maxDepth);
-    const outerR = (maxDepth + 1) * RING_GAP;
-    const cx = outerR + 140, cy = outerR + 140;
+
+    const cx = 600, cy = 420;
+    const RADII = [0, 230, 430, 600];
+
     nodes.forEach(n => {
-      if (n.depth === 0) { n.x = cx; n.y = cy; }
-      else { const r = n.depth * RING_GAP; n.x = cx + r*Math.cos(n.angle); n.y = cy + r*Math.sin(n.angle); }
+      if (n.depth === 0) { n.x = cx; n.y = cy; n.angle = 0; return; }
+      const r = RADII[Math.min(n.depth, RADII.length - 1)];
+      if (n.depth === 1) {
+        const siblings = byDepth[1] || [];
+        const idx = siblings.indexOf(n);
+        n.angle = (idx / siblings.length) * 2 * Math.PI - Math.PI / 2;
+      } else {
+        const parentNode = nodeMap[n.parent];
+        const pAngle = parentNode ? (parentNode.angle || 0) : 0;
+        const sibsByParent = (byDepth[n.depth] || []).filter(s => s.parent === n.parent);
+        const idx = sibsByParent.indexOf(n);
+        const spread = Math.PI / 2;
+        n.angle = sibsByParent.length === 1 ? pAngle :
+          pAngle - spread/2 + (idx / (sibsByParent.length - 1)) * spread;
+      }
+      n.x = cx + r * Math.cos(n.angle);
+      n.y = cy + r * Math.sin(n.angle);
     });
-    const cw = container.clientWidth, ch = container.clientHeight;
-    viewX = cw/2 - cx; viewY = ch/2 - cy; scale = 1;
+
+    viewX = container.clientWidth / 2 - cx;
+    viewY = container.clientHeight / 2 - cy;
+    scale = 1;
     applyTransform();
     renderGraph(nodes, uniqueEdges, nodeMap, dcid, cx, cy, maxDepth);
   } catch(e) {
     setStatus('Error: ' + e.message);
-  }
-}
-
-function assignAngles(nodeMap, byDepth, maxDepth) {
-  const root = Object.values(nodeMap).find(n => n.depth === 0);
-  if (root) root.angle = 0;
-  for (let d = 1; d <= maxDepth; d++) {
-    const nodesAtDepth = byDepth[d] || [];
-    if (!nodesAtDepth.length) continue;
-    const byParent = {};
-    nodesAtDepth.forEach(n => {
-      const p = n.parent || '__root__';
-      if (!byParent[p]) byParent[p] = [];
-      byParent[p].push(n);
-    });
-    Object.keys(byParent).forEach((parentId, pi) => {
-      const children = byParent[parentId];
-      const parentNode = nodeMap[parentId];
-      const parentAngle = parentNode ? (parentNode.angle || 0) : (pi / Object.keys(byParent).length) * 2 * Math.PI;
-      const sectorWidth = (2 * Math.PI) / Math.max(Object.keys(byParent).length, 1);
-      const startAngle = parentAngle - sectorWidth / 2;
-      children.forEach((child, ci) => {
-        child.angle = children.length === 1 ? parentAngle : startAngle + (ci / (children.length - 1)) * sectorWidth;
-      });
-    });
   }
 }
 
@@ -257,24 +268,27 @@ function renderGraph(nodes, edges, nodeMap, rootId, cx, cy, maxDepth) {
   mp.setAttribute('stroke-linecap','round'); mp.setAttribute('stroke-linejoin','round');
   m.appendChild(mp); defs.appendChild(m);
   zoomGroup.appendChild(defs);
+
   for (let d = 1; d <= maxDepth; d++) {
-    const r = d * RING_GAP;
+    const r = [0,230,430,600][Math.min(d,3)];
     const gc = document.createElementNS(ns,'circle');
     gc.setAttribute('cx',cx); gc.setAttribute('cy',cy); gc.setAttribute('r',r);
-    gc.setAttribute('fill','none'); gc.setAttribute('stroke','#f0eeea');
-    gc.setAttribute('stroke-width',1.5); gc.setAttribute('stroke-dasharray','6,5');
+    gc.setAttribute('fill','none'); gc.setAttribute('stroke','#eeecea');
+    gc.setAttribute('stroke-width',1); gc.setAttribute('stroke-dasharray','5,6');
     zoomGroup.appendChild(gc);
     const gt = document.createElementNS(ns,'text');
-    gt.setAttribute('x', cx+r-10); gt.setAttribute('y', cy-8);
+    gt.setAttribute('x', cx+r-8); gt.setAttribute('y', cy-6);
     gt.setAttribute('font-size',10); gt.setAttribute('fill','#ccc');
     gt.setAttribute('font-family','Segoe UI,sans-serif'); gt.setAttribute('text-anchor','end');
     gt.textContent = `depth ${d}`;
     zoomGroup.appendChild(gt);
   }
+
   const edgeGroup = document.createElementNS(ns,'g');
   zoomGroup.appendChild(edgeGroup);
   const nodeGroup = document.createElementNS(ns,'g');
   zoomGroup.appendChild(nodeGroup);
+
   edges.forEach(e => {
     const s = nodeMap[e.source], t = nodeMap[e.target];
     if (!s || !t) return;
@@ -283,21 +297,21 @@ function renderGraph(nodes, edges, nodeMap, rootId, cx, cy, maxDepth) {
     const path = document.createElementNS(ns,'path');
     path.setAttribute('d', `M${s.x},${s.y} Q${midX},${midY} ${t.x},${t.y}`);
     path.setAttribute('fill','none');
-    path.setAttribute('stroke', e.label === 'expands_to' ? '#e0e0e0' : '#bbb');
+    path.setAttribute('stroke','#bbb');
     path.setAttribute('stroke-width', 1.5);
     path.setAttribute('marker-end','url(#arr)');
     edgeGroup.appendChild(path);
-    if (e.label && e.label !== 'expands_to') {
+    if (e.label) {
       const lbl = e.label.length > 20 ? e.label.slice(0,20)+'…' : e.label;
       const lblW = lbl.length * 5.5 + 10;
       const bg = document.createElementNS(ns,'rect');
-      bg.setAttribute('x', midX - lblW/2); bg.setAttribute('y', midY - 15);
+      bg.setAttribute('x', midX-lblW/2); bg.setAttribute('y', midY-15);
       bg.setAttribute('width', lblW); bg.setAttribute('height', 13);
-      bg.setAttribute('rx', 3); bg.setAttribute('fill', '#fff');
-      bg.setAttribute('fill-opacity', '0.85');
+      bg.setAttribute('rx', 3); bg.setAttribute('fill','#fff');
+      bg.setAttribute('fill-opacity','0.85');
       edgeGroup.appendChild(bg);
       const lt = document.createElementNS(ns,'text');
-      lt.setAttribute('x', midX); lt.setAttribute('y', midY - 5);
+      lt.setAttribute('x', midX); lt.setAttribute('y', midY-5);
       lt.setAttribute('text-anchor','middle');
       lt.setAttribute('font-size',9); lt.setAttribute('fill','#888');
       lt.setAttribute('font-family','Segoe UI,sans-serif');
@@ -305,8 +319,9 @@ function renderGraph(nodes, edges, nodeMap, rootId, cx, cy, maxDepth) {
       edgeGroup.appendChild(lt);
     }
   });
+
   nodes.forEach(n => {
-    const d = Math.min(n.depth, RING_FILLS.length - 1);
+    const d = Math.min(n.depth, RING_FILLS.length-1);
     const isRoot = n.id === rootId;
     const r = isRoot ? 20 : 11;
     const g = document.createElementNS(ns,'g');
@@ -314,21 +329,19 @@ function renderGraph(nodes, edges, nodeMap, rootId, cx, cy, maxDepth) {
     if (!isRoot) {
       const shadow = document.createElementNS(ns,'circle');
       shadow.setAttribute('cx',n.x); shadow.setAttribute('cy',n.y);
-      shadow.setAttribute('r', r+2);
-      shadow.setAttribute('fill', RING_STROKES[d]);
+      shadow.setAttribute('r',r+2); shadow.setAttribute('fill',RING_STROKES[d]);
       shadow.setAttribute('opacity','0.12');
       g.appendChild(shadow);
     }
     const circle = document.createElementNS(ns,'circle');
     circle.setAttribute('cx',n.x); circle.setAttribute('cy',n.y);
-    circle.setAttribute('r',r);
-    circle.setAttribute('fill', RING_FILLS[d]);
-    circle.setAttribute('stroke', RING_STROKES[d]);
+    circle.setAttribute('r',r); circle.setAttribute('fill',RING_FILLS[d]);
+    circle.setAttribute('stroke',RING_STROKES[d]);
     circle.setAttribute('stroke-width', isRoot ? 3 : 2);
     g.appendChild(circle);
     const shortId = n.id.length > 18 ? n.id.slice(0,18)+'…' : n.id;
     const lt = document.createElementNS(ns,'text');
-    lt.setAttribute('x',n.x); lt.setAttribute('y', n.y + r + 13);
+    lt.setAttribute('x',n.x); lt.setAttribute('y', n.y+r+13);
     lt.setAttribute('text-anchor','middle');
     lt.setAttribute('font-size', isRoot ? 12 : 10);
     lt.setAttribute('font-weight', isRoot ? '700' : '400');
@@ -342,39 +355,33 @@ function renderGraph(nodes, edges, nodeMap, rootId, cx, cy, maxDepth) {
       const propLines = Object.keys(out).filter(k=>k!=='dcid').slice(0,6)
         .map(k => `  ${k}: ${(out[k]||[]).map(v=>v.name||v.dcid||'').filter(Boolean).slice(0,2).join(', ')}`)
         .join('\n');
-      tt.textContent = n.id + (propLines ? '\n\n' + propLines : '');
+      tt.textContent = n.id + (propLines ? '\n\n'+propLines : '');
       tt.style.display = 'block';
       const rect = container.getBoundingClientRect();
-      let tx = evt.clientX - rect.left + 14;
-      let ty = evt.clientY - rect.top + 14;
-      if (tx + 320 > container.clientWidth)  tx -= 340;
-      if (ty + 120 > container.clientHeight) ty -= 130;
-      tt.style.left = tx + 'px'; tt.style.top = ty + 'px';
-      circle.setAttribute('r', r+3);
+      let tx = evt.clientX-rect.left+14, ty = evt.clientY-rect.top+14;
+      if (tx+320 > container.clientWidth) tx -= 340;
+      if (ty+120 > container.clientHeight) ty -= 130;
+      tt.style.left = tx+'px'; tt.style.top = ty+'px';
+      circle.setAttribute('r',r+3);
       circle.setAttribute('stroke-width', isRoot ? 4 : 3);
     });
     g.addEventListener('mouseleave', () => {
       document.getElementById('tooltip').style.display = 'none';
-      circle.setAttribute('r', r);
+      circle.setAttribute('r',r);
       circle.setAttribute('stroke-width', isRoot ? 3 : 2);
     });
     g.addEventListener('mousemove', evt => {
       const rect = container.getBoundingClientRect();
       const tt = document.getElementById('tooltip');
-      let tx = evt.clientX - rect.left + 14;
-      let ty = evt.clientY - rect.top + 14;
-      if (tx + 320 > container.clientWidth)  tx -= 340;
-      if (ty + 120 > container.clientHeight) ty -= 130;
-      tt.style.left = tx + 'px'; tt.style.top = ty + 'px';
+      let tx = evt.clientX-rect.left+14, ty = evt.clientY-rect.top+14;
+      if (tx+320 > container.clientWidth) tx -= 340;
+      if (ty+120 > container.clientHeight) ty -= 130;
+      tt.style.left = tx+'px'; tt.style.top = ty+'px';
     });
     g.addEventListener('click', evt => {
       evt.stopPropagation();
       const out = n.out || {};
-      const rows = [
-        {k:'DCID', v: n.id},
-        {k:'Depth level', v: n.depth},
-        {k:'Parent node', v: n.parent || '(root)'}
-      ];
+      const rows = [{k:'DCID',v:n.id},{k:'Depth level',v:n.depth},{k:'Parent node',v:n.parent||'(root)'}];
       Object.keys(out).filter(k=>k!=='dcid').forEach(prop => {
         const vals = (out[prop]||[]).map(v=>v.name||v.dcid||'').filter(Boolean);
         if (vals.length) rows.push({k:prop, v:vals.join(', ')});
