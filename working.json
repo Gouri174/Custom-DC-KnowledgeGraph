@@ -1,0 +1,317 @@
+{
+  "nodes": [
+    {
+      "id": "country/IND",
+      "label": "India\n(country/IND)",
+      "type": "PLACE",
+      "level": 5,
+      "tooltip": "DCID: country/IND\nType: Place\nName: India\n\nAll MOSPI observations are for this place."
+    },
+    {
+      "id": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "label": "GVA Other Service\n(Constant prices)",
+      "type": "STAT_VAR",
+      "level": 3,
+      "tooltip": "DCID: RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService\nType: STAT_VAR\n\nName: Gross value added in other service sector at constant prices\nactivitySource: GrossValueAdded\neconomicSector: MOSPI Other Service\nmeasurementQualifier: RealValue\nmeasuredProperty: amount\npopulationType: EconomicActivity\nstatType: measuredValue\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "GrossValueAdded",
+      "label": "Gross Value Added",
+      "type": "ENUM",
+      "level": 1,
+      "tooltip": "DCID: GrossValueAdded\nType: ENUM\nName: GrossValueAdded\nConstrains StatVar via: activitySource\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "MOSPI_OtherService",
+      "label": "MOSPI Other Service",
+      "type": "ENUM",
+      "level": 1,
+      "tooltip": "DCID: MOSPI_OtherService\nType: ENUM\nName: MOSPI Other Service\nConstrains StatVar via: economicSector\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "RealValue",
+      "label": "Real Value\n(constant prices)",
+      "type": "ENUM",
+      "level": 1,
+      "tooltip": "DCID: RealValue\nType: ENUM\nName: RealValue\nConstrains StatVar via: measurementQualifier\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "amount",
+      "label": "amount",
+      "type": "PROPERTY",
+      "level": 1,
+      "tooltip": "DCID: amount\nType: PROPERTY\nName: amount\nConstrains StatVar via: measuredProperty\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "EconomicActivity",
+      "label": "Economic Activity",
+      "type": "CONCEPT",
+      "level": 0,
+      "tooltip": "DCID: EconomicActivity\nType: CONCEPT\nName: EconomicActivity\nConstrains StatVar via: populationType\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "measuredValue",
+      "label": "measuredValue",
+      "type": "STAT_TYPE",
+      "level": 1,
+      "tooltip": "DCID: measuredValue\nType: STAT_TYPE\nName: measuredValue\nConstrains StatVar via: statType\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "label": "GVA Public Admin & Defence\n(Constant prices)",
+      "type": "STAT_VAR",
+      "level": 3,
+      "tooltip": "DCID: RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService\nType: STAT_VAR\n\nName: Gross value added in public administration and defence and other service sector at constant prices\nactivitySource: GrossValueAdded\neconomicSector: PublicAdministrationAndDefence__MOSPI_OtherService\nmeasurementQualifier: RealValue\nmeasuredProperty: amount\npopulationType: EconomicActivity\nstatType: measuredValue\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "PublicAdministrationAndDefence__MOSPI_OtherService",
+      "label": "Public Admin & Defence\n+ MOSPI Other Service",
+      "type": "ENUM",
+      "level": 1,
+      "tooltip": "DCID: PublicAdministrationAndDefence__MOSPI_OtherService\nType: ENUM\nName: PublicAdministrationAndDefence__MOSPI_OtherService\nConstrains StatVar via: economicSector\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "label": "GVA Other Service\n(Current prices)",
+      "type": "STAT_VAR",
+      "level": 3,
+      "tooltip": "DCID: Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService\nType: STAT_VAR\n\nName: Gross value added in other service sector at current prices\nactivitySource: GrossValueAdded\neconomicSector: MOSPI Other Service\nmeasurementQualifier: Nominal\nmeasuredProperty: amount\npopulationType: EconomicActivity\nstatType: measuredValue\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "Nominal",
+      "label": "Nominal\n(current prices)",
+      "type": "ENUM",
+      "level": 1,
+      "tooltip": "DCID: Nominal\nType: ENUM\nName: Nominal\nConstrains StatVar via: measurementQualifier\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "label": "GVA Public Admin & Defence\n(Current prices)",
+      "type": "STAT_VAR",
+      "level": 3,
+      "tooltip": "DCID: Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService\nType: STAT_VAR\n\nName: Gross value added in public administration and defence and other service sector at current prices\nactivitySource: GrossValueAdded\neconomicSector: PublicAdministrationAndDefence__MOSPI_OtherService\nmeasurementQualifier: Nominal\nmeasuredProperty: amount\npopulationType: EconomicActivity\nstatType: measuredValue\n\nSource: indiadatacommons.org"
+    },
+    {
+      "id": "obs::RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService::placeholder",
+      "label": "Observations\n(India, annual)",
+      "type": "OBSERVATION",
+      "level": 5,
+      "tooltip": "StatVar: RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService\nPlace: India\nFetch: /api/stat/series?stat_var=RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService&place=country/IND\n\nNo live data returned — may need auth or different endpoint."
+    },
+    {
+      "id": "obs::RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService::placeholder",
+      "label": "Observations\n(India, annual)",
+      "type": "OBSERVATION",
+      "level": 5,
+      "tooltip": "StatVar: RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService\nPlace: India\nFetch: /api/stat/series?stat_var=RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService&place=country/IND\n\nNo live data returned — may need auth or different endpoint."
+    },
+    {
+      "id": "obs::Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService::placeholder",
+      "label": "Observations\n(India, annual)",
+      "type": "OBSERVATION",
+      "level": 5,
+      "tooltip": "StatVar: Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService\nPlace: India\nFetch: /api/stat/series?stat_var=Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService&place=country/IND\n\nNo live data returned — may need auth or different endpoint."
+    },
+    {
+      "id": "obs::Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService::placeholder",
+      "label": "Observations\n(India, annual)",
+      "type": "OBSERVATION",
+      "level": 5,
+      "tooltip": "StatVar: Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService\nPlace: India\nFetch: /api/stat/series?stat_var=Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService&place=country/IND\n\nNo live data returned — may need auth or different endpoint."
+    }
+  ],
+  "edges": [
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "GrossValueAdded",
+      "prop": "activitySource",
+      "color": null
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "MOSPI_OtherService",
+      "prop": "economicSector",
+      "color": null
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "RealValue",
+      "prop": "measurementQualifier",
+      "color": null
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "amount",
+      "prop": "measuredProperty",
+      "color": null
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "EconomicActivity",
+      "prop": "populationType",
+      "color": null
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "measuredValue",
+      "prop": "statType",
+      "color": null
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "GrossValueAdded",
+      "prop": "activitySource",
+      "color": null
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "PublicAdministrationAndDefence__MOSPI_OtherService",
+      "prop": "economicSector",
+      "color": null
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "RealValue",
+      "prop": "measurementQualifier",
+      "color": null
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "amount",
+      "prop": "measuredProperty",
+      "color": null
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "EconomicActivity",
+      "prop": "populationType",
+      "color": null
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "measuredValue",
+      "prop": "statType",
+      "color": null
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "GrossValueAdded",
+      "prop": "activitySource",
+      "color": null
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "MOSPI_OtherService",
+      "prop": "economicSector",
+      "color": null
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "Nominal",
+      "prop": "measurementQualifier",
+      "color": null
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "amount",
+      "prop": "measuredProperty",
+      "color": null
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "EconomicActivity",
+      "prop": "populationType",
+      "color": null
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "measuredValue",
+      "prop": "statType",
+      "color": null
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "GrossValueAdded",
+      "prop": "activitySource",
+      "color": null
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "PublicAdministrationAndDefence__MOSPI_OtherService",
+      "prop": "economicSector",
+      "color": null
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "Nominal",
+      "prop": "measurementQualifier",
+      "color": null
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "amount",
+      "prop": "measuredProperty",
+      "color": null
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "EconomicActivity",
+      "prop": "populationType",
+      "color": null
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "measuredValue",
+      "prop": "statType",
+      "color": null
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "obs::RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService::placeholder",
+      "prop": "hasObservation",
+      "color": null
+    },
+    {
+      "from": "obs::RealValue_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService::placeholder",
+      "to": "country/IND",
+      "prop": "forPlace",
+      "color": null
+    },
+    {
+      "from": "RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "obs::RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService::placeholder",
+      "prop": "hasObservation",
+      "color": null
+    },
+    {
+      "from": "obs::RealValue_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService::placeholder",
+      "to": "country/IND",
+      "prop": "forPlace",
+      "color": null
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService",
+      "to": "obs::Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService::placeholder",
+      "prop": "hasObservation",
+      "color": null
+    },
+    {
+      "from": "obs::Nominal_Amount_EconomicActivity_GrossValueAdded_MOSPIOtherService::placeholder",
+      "to": "country/IND",
+      "prop": "forPlace",
+      "color": null
+    },
+    {
+      "from": "Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService",
+      "to": "obs::Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService::placeholder",
+      "prop": "hasObservation",
+      "color": null
+    },
+    {
+      "from": "obs::Nominal_Amount_EconomicActivity_GrossValueAdded_PublicAdministrationAndDefenceOrMOSPIOtherService::placeholder",
+      "to": "country/IND",
+      "prop": "forPlace",
+      "color": null
+    }
+  ]
+}
