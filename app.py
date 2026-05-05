@@ -1,6 +1,9 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
+import os
+
+
 
 app = Flask(__name__)
 CORS(app)
@@ -59,6 +62,11 @@ def get_graph(dcid):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+#if __name__ == "__main__":
+ #   print("India Data Commons proxy running at http://localhost:5050")
+    #app.run(port=5050, debug=False)
+
 if __name__ == "__main__":
-    print("India Data Commons proxy running at http://localhost:5050")
-    app.run(port=5050, debug=False)
+    port = int(os.environ.get("PORT", 10000))
+    print(f"Running on port {port}")
+    app.run(host="0.0.0.0", port=port)
